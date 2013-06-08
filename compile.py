@@ -24,7 +24,6 @@ def pandocConvert(pathto, fname):
     p = subprocess.call(pandoc_call)
 
     return
-    #return bytes.decode(p.communicate(bytes(source, 'UTF-8'))[0])
 
 
 def isPage(fname):
@@ -35,20 +34,26 @@ def isPage(fname):
 
 
 
+def convert_folder(folder, wl=None):
+    if folder == '':
+        folder = './' 
+
+    if wl is not None:
+        filter = lambda fn: fname_no_ext(fn) in wl
+    else:
+        filter = lambda fn: True
+
+    out_path = out_folder + folder
+
+    for fname in os.listdir(folder):
+        if isPage(fname) and filter(fname):
+            if not os.path.exists(out_path):
+                os.makedirs(out_path)
+
+            pandocConvert(folder, fname)
+    
+
 # Compilation script begins here
-for fname in os.listdir('./'):
-    if isPage(fname):
-        pandocConvert('', fname)
-
-
-for fname in os.listdir('./blov/'):
-    if isPage(fname):
-        pandocConvert('blov/', fname)
-
-for fname in os.listdir('./notes/'):
-    if isPage(fname) and fname_no_ext(fname) in ['linalg']:
-        out_dir = out_folder + 'notes/'
-        if not os.path.exists(out_dir):
-            os.makedirs(out_dir)
-
-        pandocConvert('notes/', fname)
+convert_folder('')
+convert_folder('blov/')
+convert_folder('notes/', wl=['linalg'])
