@@ -46,23 +46,23 @@ class Driveler:
         else:
             filter = lambda fn: True
 
-        out_folder = self.out_path(folder)
+        new_out_folder = self.out_path(folder)
 
         for fname in os.listdir(folder):
             if self.is_page(fname) and filter(fname):
-                if not os.path.exists(self.out_folder):
-                    os.makedirs(self.out_folder)
+                if not os.path.exists(new_out_folder):
+                    os.makedirs(new_out_folder)
 
                 self.convert_file(folder, fname)
 
 
     def copy_folder(self, folder):
-        out_folder = self.out_path(folder)
+        new_out_folder = self.out_path(folder)
 
-        if not os.path.exists(self.out_folder):
-            os.makedirs(self.out_folder)
+        if not os.path.exists(new_out_folder):
+            os.makedirs(new_out_folder)
             
         for fname in os.listdir(folder):
             site_file = folder + fname
-            out_file =  self.out_folder + fname
+            out_file =  new_out_folder + fname
             shutil.copy(site_file, out_file)
