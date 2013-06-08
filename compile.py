@@ -4,7 +4,6 @@ from glob import glob
 
 site_title = 'wabbo'
 include_dir = 'includes/'
-exclude_files = ['readme.md']
 out_folder = '_out/'
 
 
@@ -29,12 +28,10 @@ def pandocConvert(pathto, fname):
 def isPage(fname):
     pages = ['.md', '.rst']
     return ('.' in fname) \
-        and (fname[fname.index('.'):] in pages) \
-        and fname not in exclude_files
+        and (fname[fname.index('.'):] in pages)
 
 
-
-def convert_folder(folder, wl=None):
+def convert_folder(folder, wl=None, bl=None):
     if folder == '':
         folder = './' 
 
@@ -42,6 +39,12 @@ def convert_folder(folder, wl=None):
         filter = lambda fn: fname_no_ext(fn) in wl
     else:
         filter = lambda fn: True
+
+    if bl is not None:
+        filter = lambda fn: fname_no_ext(fn) not in bl
+    else:
+        filter = lambda fn: True
+
 
     out_path = out_folder + folder
 
@@ -54,6 +57,6 @@ def convert_folder(folder, wl=None):
     
 
 # Compilation script begins here
-convert_folder('')
+convert_folder('', bl=['readme'])
 convert_folder('blov/')
 convert_folder('notes/', wl=['linalg'])
