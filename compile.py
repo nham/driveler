@@ -54,9 +54,21 @@ def convert_folder(folder, wl=None, bl=None):
                 os.makedirs(out_path)
 
             pandocConvert(folder, fname)
-    
+
+def copy_folder(folder):
+    out_path = out_folder + folder
+
+    if not os.path.exists(out_path):
+        os.makedirs(out_path)
+        
+    for fname in os.listdir(folder):
+        site_file = folder + fname
+        out_file =  out_path + fname
+        shutil.copy(site_file, out_file)
+
 
 # Compilation script begins here
+copy_folder('css/')
 convert_folder('', bl=['readme'])
 convert_folder('blov/')
 convert_folder('notes/', wl=['linalg'])
