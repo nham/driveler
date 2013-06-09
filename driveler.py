@@ -2,8 +2,6 @@ import os, shutil, subprocess
 import logging
 import argparse
 
-fname_no_ext = lambda fn: fn[:fn.index('.')]
-
 class Driveler:
     def __init__(self):
         args = self.parse_arguments()
@@ -41,6 +39,8 @@ class Driveler:
     def convert_folder(self, folder, wl=None, bl=None):
         if folder == '':
             folder = './' 
+
+        fname_no_ext = lambda fn: fn[:fn.index('.')]
 
         if wl is not None:
             filter = lambda fn: fname_no_ext(fn) in wl
