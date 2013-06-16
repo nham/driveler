@@ -94,7 +94,8 @@ class Driveler:
                       '--include-before-body', self.incl_path('before_body.html'),
                       '--include-after-body', self.incl_path('after_body.html'),
                       '--mathjax', '--smart',
-                      '--title-prefix', self.site_title]
+                      '--title-prefix', self.site_title,
+                      '--highlight-style', 'zenburn']
                       + css_file)
 
         p = subprocess.call(pandoc_call)

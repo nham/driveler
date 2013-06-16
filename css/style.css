@@ -12,13 +12,6 @@ div#container {
     padding: 20px;
 }
 
-div#container figure {
-    margin: 0;
-    padding: 0;
-    width: 100%;
-    text-align: center;
-}
-
 p {
     line-height: 1.5em;
     color: #222;
@@ -46,13 +39,8 @@ footer {
     font-size: 14px;
 }
 
-
-#site_header {
-    text-align: center;
+pre.sourceCode {
+    padding-top: 5px;
+    padding-bottom: 5px;
 }
 
-#site_header > h1 {
-    font-size: 36px;
-    width: 250px;
-    margin: 0 auto;
-}
