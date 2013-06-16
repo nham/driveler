@@ -1,0 +1,58 @@
+body {
+    margin: 0px;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 18px;
+}
+
+div#container {
+    width: 660px;
+    margin: 0px auto;
+    border-left: 2px solid #444;
+    border-right: 2px solid #444;
+    padding: 20px;
+}
+
+div#container figure {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    text-align: center;
+}
+
+p {
+    line-height: 1.5em;
+    color: #222;
+}
+
+h1 {
+    line-height: 1.1em;
+}
+
+ul {
+    line-height: 1.5em;
+}
+
+hgroup {
+    margin-bottom: 40px;
+}
+
+a, a:visited {
+    color: #0d55d0;
+}
+
+footer {
+    margin-top: 100px;
+    text-align: center;
+    font-size: 14px;
+}
+
+
+#site_header {
+    text-align: center;
+}
+
+#site_header > h1 {
+    font-size: 36px;
+    width: 250px;
+    margin: 0 auto;
+}
