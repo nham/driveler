@@ -58,6 +58,10 @@ class Comptroller:
 
 class Driveler:
     def __init__(self):
+        # defaults
+        self.css_file = None
+        self.out_folder = '_out/'
+
         args = self.parse_arguments()
         logging.basicConfig(level=args.verbosity)
         self.force_compile = args.force
@@ -78,7 +82,12 @@ class Driveler:
         in_file = pathto + fname
         out_file = self.out_path(pathto + dothtml)
 
-        pandoc_call = ['pandoc', '-s', in_file, 
+        if self.css_file is not None:
+            css_file = ['--css', self.css_file]
+        else:
+            css_file = []
+
+        pandoc_call = (['pandoc', '-s', in_file, 
                       '-t', 'html5+pandoc_title_block',
                       '-o', out_file,
                       '--include-in-header', self.incl_path('in_header.html'),
@@ -86,6 +95,7 @@ class Driveler:
                       '--include-after-body', self.incl_path('after_body.html'),
                       '--mathjax', '--smart',
                       '--title-prefix', self.site_title]
+                      + css_file)
 
         p = subprocess.call(pandoc_call)
         logging.info('generated page {0}'.format(out_file))
