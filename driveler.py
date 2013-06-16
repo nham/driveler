@@ -78,7 +78,9 @@ class Driveler:
         in_file = pathto + fname
         out_file = self.out_path(pathto + dothtml)
 
-        pandoc_call = ['pandoc', '-s', in_file, '-t', 'html5', '-o', out_file,
+        pandoc_call = ['pandoc', '-s', in_file, 
+                      '-t', 'html5+pandoc_title_block',
+                      '-o', out_file,
                       '--include-in-header', self.incl_path('in_header.html'),
                       '--include-before-body', self.incl_path('before_body.html'),
                       '--include-after-body', self.incl_path('after_body.html'),
