@@ -1,3 +1,4 @@
 env/
 driveler.sqlite
 __pycache__/
+docs/
