@@ -1,7 +1,7 @@
 from driveler import Driveler
 
 d = Driveler()
-d.site_title = 'site'
+d.site_title = 'Driveler'
 d.include_dir = 'includes/'
 d.css_file = '/css/style.css'
 
