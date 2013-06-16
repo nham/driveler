@@ -60,6 +60,7 @@ class Driveler:
     def __init__(self):
         # defaults
         self.css_file = None
+        self.site_title = None
         self.out_folder = '_out/'
 
         args = self.parse_arguments()
@@ -87,6 +88,11 @@ class Driveler:
         else:
             css_file = []
 
+        if self.site_title is not None:
+            site_title = ['--title-prefix', self.site_title]
+        else:
+            site_title = []
+
         pandoc_call = (['pandoc', '-s', in_file, 
                       '-t', 'html5+pandoc_title_block',
                       '-o', out_file,
@@ -94,8 +100,8 @@ class Driveler:
                       '--include-before-body', self.incl_path('before_body.html'),
                       '--include-after-body', self.incl_path('after_body.html'),
                       '--mathjax', '--smart',
-                      '--title-prefix', self.site_title,
                       '--highlight-style', 'zenburn']
+                      + site_title
                       + css_file)
 
         p = subprocess.call(pandoc_call)

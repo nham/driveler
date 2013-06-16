@@ -18,7 +18,9 @@ You can then instantiate this in your compilation script:
     # compilation logic goes here
 ````
 
-The three variables listed above are required to be set. `out_folder` is the folder where the HTML/CSS files go after compilation. `site_title` is the name of your blog/site/whatev. `include_dir` should be a folder where HTML templates are kept.
+You can set a variety of parameters when compiling. So far, only `include_dir` is required. It is the folder where HTML templates are kept.`out_folder` is the folder where the HTML/CSS files go after compilation. It defaults to "_out/". `site_title` is the name of your blog/site/whatev, and will show up as a prefix in the HTML page title, like "site_title - page_title".  You can also use a css file by setting `css_file`.
+
+Note that driveler uses the pandoc_title_block extension, so you can set author, page title and date for each page. Please check the Pandoc documents for more details.
 
 
 ## Why use this when I can use {fancy, feature-filled static site generator}?
