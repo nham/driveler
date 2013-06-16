@@ -31,7 +31,25 @@ class Comptroller:
         sql = 'SELECT * FROM mtimes'
         c.execute(sql)
         return c.fetchall()
+
+    def get_mtime(self, path):
+        c = self.conn.cursor()
+        sql = 'SELECT mtime FROM mtimes WHERE path = ?'
+        c.execute(sql, (path,))
+        return c.fetchone()
         
+
+    def set_mtime(self, path, mtime):
+        c = self.conn.cursor()
+
+        if self.get_mtime(path) is None:
+            sql = 'INSERT INTO mtimes (path, mtime) VALUES (?, ?)'
+            c.execute(sql, (path, mtime))
+        else:
+            sql = 'UPDATE mtimes SET mtime = ? where path = ?'
+            c.execute(sql, (mtime, path))
+
+        self.conn.commit()
 
     def close(self):
         self.conn.close()
@@ -42,8 +60,12 @@ class Driveler:
     def __init__(self):
         args = self.parse_arguments()
         logging.basicConfig(level=args.verbosity)
+        self.force_compile = args.force
+
+        if self.force_compile is True:
+            logging.info('Forcing compilation of all files.')
+
         self.comp = Comptroller()
-        self.comp.dump()
 
     def out_path(self, relpath):
         return self.out_folder + relpath
@@ -90,10 +112,33 @@ class Driveler:
         new_out_folder = self.out_path(folder)
 
         for fname in os.listdir(folder):
-            if self.changed(folder, fname):
-                if self.is_page(fname) and filter(fname):
+            if self.is_page(fname) and filter(fname):
+                new_mtime = self.changed(folder, fname)
+
+                if self.force_compile is True or new_mtime is not False:
                     self.create_folder_if_not_exists(new_out_folder)
                     self.convert_file(folder, fname)
+
+                    if new_mtime is not False:
+                        self.comp.set_mtime(folder+fname, new_mtime)
+                else:
+                    logging.info('mtime for {0} is not newer than last compile.'.format(folder+fname))
+
+
+    def changed(self, folder, fname):
+        path = folder+fname
+        logged_mtime = self.comp.get_mtime(path)
+
+        if logged_mtime is not None:
+            logged_mtime = logged_mtime[0]
+
+        new_mtime = os.path.getmtime(path)
+
+        if logged_mtime is None or new_mtime > float(logged_mtime):
+            return str(new_mtime)
+        else:
+            return False
+
 
 
     def create_folder_if_not_exists(self, folder):
@@ -108,10 +153,19 @@ class Driveler:
         self.create_folder_if_not_exists(new_out_folder)
 
         for fname in os.listdir(folder):
-            site_file = folder + fname
-            out_file =  new_out_folder + fname
-            shutil.copy(site_file, out_file)
-            logging.info('copied {0} to {1}'.format(site_file, out_file))
+            new_mtime = self.changed(folder, fname)
+
+            if self.force_compile is True or new_mtime is not False:
+                site_file = folder + fname
+                out_file =  new_out_folder + fname
+                shutil.copy(site_file, out_file)
+
+                if new_mtime is not False:
+                    self.comp.set_mtime(folder+fname, new_mtime)
+
+                logging.info('copied {0} to {1}'.format(site_file, out_file))
+            else:
+                logging.info('mtime for {0} is not newer than last compile.'.format(folder+fname))
 
 
     def parse_arguments(self):
