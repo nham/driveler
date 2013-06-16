@@ -1,4 +1,4 @@
-# Driveler
+% About Driveler
 
 A stupid static site generator in Python 3. Requires pandoc to be available. (It's really just a wrapper around Pandoc)
 
