@@ -166,25 +166,35 @@ class Driveler:
             os.makedirs(folder)
             
 
+    def copy_file(self, path):
+        last_slash = path.rindex('/') + 1
+        self._copy_file(path[:last_slash], path[last_slash:])
+
+
+    def _copy_file(self, folder, fname):
+        new_out_folder = self.out_path(folder)
+        new_mtime = self.changed(folder, fname)
+
+        if self.force_compile is True or new_mtime is not False:
+            site_file = folder + fname
+            out_file =  new_out_folder + fname
+            shutil.copy(site_file, out_file)
+
+            if new_mtime is not False:
+                self.comp.set_mtime(folder+fname, new_mtime)
+
+            logging.info('copied {0} to {1}'.format(site_file, out_file))
+        else:
+            logging.info('mtime for {0} is not newer than last compile.'.format(folder+fname))
+
+
     def copy_folder(self, folder):
         new_out_folder = self.out_path(folder)
 
         self.create_folder_if_not_exists(new_out_folder)
 
         for fname in os.listdir(folder):
-            new_mtime = self.changed(folder, fname)
-
-            if self.force_compile is True or new_mtime is not False:
-                site_file = folder + fname
-                out_file =  new_out_folder + fname
-                shutil.copy(site_file, out_file)
-
-                if new_mtime is not False:
-                    self.comp.set_mtime(folder+fname, new_mtime)
-
-                logging.info('copied {0} to {1}'.format(site_file, out_file))
-            else:
-                logging.info('mtime for {0} is not newer than last compile.'.format(folder+fname))
+            self._copy_file(folder, fname)
 
 
     def parse_arguments(self):
