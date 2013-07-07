@@ -167,7 +167,10 @@ class Driveler:
             
 
     def copy_file(self, path):
-        last_slash = path.rindex('/') + 1
+        if '/' in path:
+            last_slash = path.rindex('/') + 1
+        else:
+            last_slash = 0
         self._copy_file(path[:last_slash], path[last_slash:])
 
 
